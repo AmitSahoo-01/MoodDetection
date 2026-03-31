@@ -1,9 +1,11 @@
 import React from 'react'
-import FaceExpression from './features/components/pages/FaceExpression'
+import FaceExpression from './features/components/FaceExpression'
+import "./style.scss"
+
 
 const App = () => {
   return (
-    <main>
+    <main className='mainDiv' >
       <FaceExpression/>
     </main>
   )
