@@ -1,7 +1,7 @@
 const userModel = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const blacklistModel = require("../models/blacklist.model");
 
 
 // This function is responsible for registering a new user by taking the username, email, and password from the request body, hashing the password, and saving the user to the database. It also checks for existing users with the same email or username to prevent duplicates.
@@ -56,7 +56,7 @@ async function loginController(req, res) {
             { email },
             { username }
         ],
-    });
+    }).select("+password");
     
     if(!user){
         return res.status(400).json({
@@ -91,7 +91,39 @@ async function loginController(req, res) {
     });
 }
 
+
+//  This controller function is responsible for authenticating incoming requests by verifying the presence and validity of a JSON Web Token (JWT) in the request cookies. If the token is valid, it allows the request to proceed; otherwise, it responds with an unauthorized/invalid token error.
+//  auth middleware
+async function getMeController(req, res) {
+  const user = await userModel.findById(req.user.id);
+
+  return res.status(200).json({
+    message: "User details fetched successfully.",
+    user,
+  });
+};
+
+//  This controller function is responsible for logging out a user by clearing the authentication token from the client's cookies, effectively ending the user's session and preventing further authenticated requests until they log in again.
+//  logout controller
+async function logoutController(req, res) {
+  const token = req.cookies.token;
+  
+  res.clearCookie("token");
+
+  await blacklistModel.create({
+    token
+  });
+
+  return res.status(200).json({
+    message:"use logout successfully."
+  });
+
+}
+
+
 module.exports = {
   registerController,
   loginController,
+  getMeController,
+  logoutController, 
 };
