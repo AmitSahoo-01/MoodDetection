@@ -3,3 +3,7 @@ node_modules
 .env
 dist
 coverage 
+
+HOST = redis-13789.crce276.ap-south-1-3.ec2.cloud.redislabs.com
+PORT = 13789
+password = FEPYsUWb3OBzPRmqcD9gl2ps4mCgfniD

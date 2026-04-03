@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const blacklistModel = require("../models/blacklist.model");
+const redis = require("../config/cache");
 
 
 // This middleware function is responsible for authenticating incoming requests by verifying the presence and validity of a JSON Web Token (JWT) in the request cookies. If the token is valid, it allows the request to proceed; otherwise, it responds with an unauthorized/invalid token error.
@@ -13,9 +14,7 @@ async function authUser(req, res, next) {
         });
     }
 
-    const isTokenBlacklist = await blacklistModel.findOne({
-        token
-    });
+    const isTokenBlacklist = await redis.get(token);
 
     if(isTokenBlacklist){
         return res.status(200).json({

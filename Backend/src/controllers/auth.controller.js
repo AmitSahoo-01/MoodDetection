@@ -2,6 +2,7 @@ const userModel = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const blacklistModel = require("../models/blacklist.model");
+const redis = require("../config/cache");
 
 
 // This function is responsible for registering a new user by taking the username, email, and password from the request body, hashing the password, and saving the user to the database. It also checks for existing users with the same email or username to prevent duplicates.
@@ -110,12 +111,10 @@ async function logoutController(req, res) {
   
   res.clearCookie("token");
 
-  await blacklistModel.create({
-    token
-  });
+  await redis.set(token,Date.now().toString(),"EX",60*60);
 
   return res.status(200).json({
-    message:"use logout successfully."
+    message:"user logout successfully."
   });
 
 }

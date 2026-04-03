@@ -19,7 +19,7 @@ router.post("/login",authContoller.loginController );
 router.get("/get-me",authUser,authContoller.getMeController );
 
 //  This is the route for logout a user and it is a private route.
-//  get("api/auth/logout"); (private route);
+//  get("api/auth/logout"); (private route); 
 router.get("/logout",authContoller.logoutController);
 
 module.exports = router;
