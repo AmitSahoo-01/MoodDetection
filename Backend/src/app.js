@@ -13,12 +13,14 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-//  prefix for auth routes
+//  require auth routes
 const authRoutes = require("./routes/auth.routes");
-
+//  require song routes
+const songRoutes = require("./routes/song.routes");
 
 //  using the prefix auth routes.
 app.use("/api/auth", authRoutes );
-
+//  using the prefix song routes.
+app.use("/api/songs", songRoutes );
 
 module.exports = app;
